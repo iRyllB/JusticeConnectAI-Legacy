@@ -41,23 +41,29 @@ export default function HomeAndAuthScreen() {
 
           <Text style={styles.authTitle}>Ready to Connect?</Text>
 
+          {/* ✅ LOGIN BUTTON → go to LoginScreen */}
           <TouchableOpacity
             style={styles.loginBtn}
-            onPress={() => navigation.navigate("Auth", { mode: "login" })}
+            onPress={() => navigation.navigate("Login")}
           >
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
 
+          {/* ✅ SIGNUP BUTTON → go to SignupScreen */}
           <TouchableOpacity
             style={styles.signUpBtn}
-            onPress={() => navigation.navigate("Auth", { mode: "signup" })}
+            onPress={() => navigation.navigate("Signup")}
           >
             <Text style={styles.signUpText}>Sign Up</Text>
           </TouchableOpacity>
 
           <Text style={styles.orText}>OR</Text>
 
-          <TouchableOpacity style={styles.guestBtn}>
+          {/* ✅ GUEST BUTTON → go to Homepage */}
+          <TouchableOpacity
+            style={styles.guestBtn}
+            onPress={() => navigation.replace("Homepage")}
+          >
             <Text style={styles.guestText}>Continue as Guest</Text>
           </TouchableOpacity>
 
