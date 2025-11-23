@@ -11,86 +11,130 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const [message, setMessage] = useState("");
+  const navigation = useNavigation();
 
   const handleHamburger = () => {
     Alert.alert("Hamburger", "hamburger successfully opened");
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{flex:1}}>
-      <View style={styles.page}>
-        {/* NAVBAR */}
-        <View style={styles.navbar}>
-          <View style={styles.navLeft}>
-            <TouchableOpacity onPress={handleHamburger} style={styles.menuBtn}>
-              <View style={styles.line} />
-              <View style={styles.line} />
-              <View style={styles.line} />
-            </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F4F8FF" }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 10}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.page}>
+            {/* NAVBAR */}
+            <View style={styles.navbar}>
+              <View style={styles.navLeft}>
+                <TouchableOpacity
+                  onPress={handleHamburger}
+                  style={styles.menuBtn}
+                >
+                  <View style={styles.line} />
+                  <View style={styles.line} />
+                  <View style={styles.line} />
+                </TouchableOpacity>
 
-            <View>
-              <Text style={styles.navTitle}>JusticeConnect</Text>
-              <Text style={styles.navSubtitle}>Philippine Law AI · English</Text>
+                <View>
+                  <Text style={styles.navTitle}>JusticeConnect</Text>
+                  <Text style={styles.navSubtitle}>
+                    Philippine Law AI · English
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.navRight}></View>
             </View>
+
+            <ScrollView
+              contentContainerStyle={styles.scrollContent}
+              keyboardShouldPersistTaps="handled"
+            >
+              {/* MAIN CONTENT */}
+              <View style={styles.centerContent}>
+                <Image
+                  source={require("../assets/mainlogo.png")}
+                  style={styles.mainLogo}
+                />
+
+                <Text style={styles.welcome}>Welcome to JusticeConnect</Text>
+                <Text style={styles.description}>
+                  Ask me anything about Philippine law
+                </Text>
+
+                {/* CATEGORY GRID */}
+                <View style={styles.grid}>
+                  <TouchableOpacity
+                    style={[styles.box, { backgroundColor: "#0B3C6C" }]}
+                  >
+                    <Text style={styles.boxText}>Labor Rights</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.box, { backgroundColor: "#F5C629" }]}
+                  >
+                    <Text style={styles.boxTextDark}>Property</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.box, { backgroundColor: "#F5C629" }]}
+                  >
+                    <Text style={styles.boxTextDark}>Family Law</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.box, { backgroundColor: "#0B3C6C" }]}
+                  >
+                    <Text style={styles.boxText}>Traffic Law</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+
+            {/* CHAT INPUT */}
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 10}
+              style={styles.chatBoxWrapper}
+            >
+              <View style={styles.chatBox}>
+                <TextInput
+                  style={styles.chatInput}
+                  placeholder="What would you like to know?"
+                  placeholderTextColor="#777"
+                  value={message}
+                  onChangeText={setMessage}
+                  multiline={false}
+                  returnKeyType="send"
+                />
+                <TouchableOpacity style={styles.sendBtn}>
+                  <Text style={styles.sendArrow}>➤</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+
+            {/* BACK BUTTON AT BOTTOM */}
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.backText}>{"<"} Back</Text>
+            </TouchableOpacity>
           </View>
-
-          <View style={styles.navRight}></View>
-        </View>
-
-        {/* MAIN CONTENT */}
-        <View style={styles.centerContent}>
-          <Image source={require("../assets/mainlogo.png")} style={styles.mainLogo} />
-
-          <Text style={styles.welcome}>Welcome to JusticeConnect</Text>
-          <Text style={styles.description}>Ask me anything about Philippine law</Text>
-
-          {/* CATEGORY GRID */}
-          <View style={styles.grid}>
-            <TouchableOpacity style={[styles.box, { backgroundColor: "#0B3C6C" }]}>
-              <Text style={styles.boxText}>Labor Rights</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.box, { backgroundColor: "#F5C629" }]}>
-              <Text style={styles.boxTextDark}>Property</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.box, { backgroundColor: "#F5C629" }]}>
-              <Text style={styles.boxTextDark}>Family Law</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.box, { backgroundColor: "#0B3C6C" }]}>
-              <Text style={styles.boxText}>Traffic Law</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* CHAT INPUT ONLY moves up on keyboard */}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 10}
-          style={styles.chatBoxWrapper}
-        >
-          <View style={styles.chatBox}>
-            <TextInput
-              style={styles.chatInput}
-              placeholder="What would you like to know?"
-              placeholderTextColor="#777"
-              value={message}
-              onChangeText={setMessage}
-              multiline={false}
-              returnKeyType="send"
-            />
-            <TouchableOpacity style={styles.sendBtn}>
-              <Text style={styles.sendArrow}>➤</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -98,6 +142,12 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: "#F4F8FF",
+    //paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 18,
   },
 
   /* NAVBAR */
@@ -107,17 +157,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#0B3C6C",
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 18,
+    paddingHorizontal: 0,
     justifyContent: "space-between",
   },
 
   navLeft: {
     flexDirection: "row",
     alignItems: "center",
+    paddingLeft: 10,
   },
 
   menuBtn: {
-    marginRight: 15,
+    marginRight: 10,
   },
 
   line: {
@@ -148,8 +199,7 @@ const styles = StyleSheet.create({
   /* MAIN CONTENT */
   centerContent: {
     alignItems: "center",
-    paddingTop: 25,
-    paddingBottom: 25, // leave some bottom padding for spacing from chatbox
+    paddingVertical: 25,
   },
 
   mainLogo: {
@@ -173,7 +223,7 @@ const styles = StyleSheet.create({
 
   /* GRID */
   grid: {
-    width: "88%",
+    width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
@@ -202,7 +252,7 @@ const styles = StyleSheet.create({
   /* CHAT INPUT */
   chatBoxWrapper: {
     paddingHorizontal: 15,
-    paddingBottom: 15,
+    paddingBottom: 10,
     backgroundColor: "transparent",
   },
 
@@ -235,5 +285,22 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+
+  /* BACK BUTTON AT BOTTOM */
+  backBtn: {
+    position: "absolute",
+    bottom: 100,
+    left: 18,
+    right: 18,
+    paddingVertical: 0,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+
+  backText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#0B3C6C",
   },
 });
