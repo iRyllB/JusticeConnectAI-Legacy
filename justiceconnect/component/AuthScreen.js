@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "../firebase/firebase";
+import {
+  createLocalUser,
+  loginLocalUser,
+} from "../localdb/userDB";
 import {
   View,
   Text,
@@ -14,6 +17,8 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
+import SuccessOverlay from "../component/overlays/SuccessOverlay";
+
 export default function AuthScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -25,10 +30,10 @@ export default function AuthScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Confirm password toggle
+  // Password toggle
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Error messages per field
+  // Error messages
   const [errorMessage, setErrorMessage] = useState({
     username: "",
     email: "",
@@ -36,11 +41,17 @@ export default function AuthScreen() {
     confirmPassword: "",
   });
 
-  // Email & phone validation
+  // Overlay state
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [overlayMode, setOverlayMode] = useState(""); // "signup" or "login"
+
+  // Validation functions
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePhone = (phone) => /^\d{10,15}$/.test(phone);
 
-  // Signup
+  // -----------------------------
+  // SIGNUP
+  // -----------------------------
   const handleSignup = async () => {
     let hasError = false;
     let errors = { username: "", email: "", password: "", confirmPassword: "" };
@@ -78,14 +89,17 @@ export default function AuthScreen() {
     if (hasError) return;
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigation.replace("Home");
+      await createLocalUser({ username, email, password });
+      setOverlayMode("signup");   // Show "Registration Successful"
+      setOverlayVisible(true);
     } catch (err) {
       setErrorMessage({ ...errors, email: err.message });
     }
   };
 
-  // Login
+  // -----------------------------
+  // LOGIN
+  // -----------------------------
   const handleLogin = async () => {
     let errors = { username: "", email: "", password: "", confirmPassword: "" };
     let hasError = false;
@@ -103,10 +117,27 @@ export default function AuthScreen() {
     if (hasError) return;
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigation.replace("Home");
+      await loginLocalUser({ username, password });
+      setOverlayMode("login");    // Show "Login Successful"
+      setOverlayVisible(true);
     } catch (err) {
-      setErrorMessage({ ...errors, password: "Invalid username or password" });
+      setErrorMessage({
+        ...errors,
+        password: "Invalid username or password",
+      });
+    }
+  };
+
+  // -----------------------------
+  // Overlay button logic
+  // -----------------------------
+  const handleOverlayClose = () => {
+    setOverlayVisible(false);
+
+    if (overlayMode === "signup") {
+      navigation.replace("Auth", { mode: "login" });
+    } else if (overlayMode === "login") {
+      navigation.replace("Home");
     }
   };
 
@@ -121,7 +152,10 @@ export default function AuthScreen() {
       >
         <View style={styles.container}>
           {/* Back Button */}
-          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => navigation.goBack()}
+          >
             <Text style={styles.backText}>{"<"}</Text>
           </TouchableOpacity>
 
@@ -132,12 +166,11 @@ export default function AuthScreen() {
             resizeMode="contain"
           />
 
-          {/* Title */}
           <Text style={styles.title}>
             {mode === "signup" ? "Register" : "Welcome"}
           </Text>
 
-          {/* ---------- SIGNUP ---------- */}
+          {/* SIGNUP */}
           {mode === "signup" && (
             <>
               <Text style={styles.label}>Username:</Text>
@@ -146,9 +179,9 @@ export default function AuthScreen() {
                 value={username}
                 onChangeText={setUsername}
               />
-              {errorMessage.username ? (
+              {errorMessage.username && (
                 <Text style={styles.errorText}>{errorMessage.username}</Text>
-              ) : null}
+              )}
 
               <Text style={styles.label}>Email / Phone:</Text>
               <TextInput
@@ -156,9 +189,9 @@ export default function AuthScreen() {
                 value={email}
                 onChangeText={setEmail}
               />
-              {errorMessage.email ? (
+              {errorMessage.email && (
                 <Text style={styles.errorText}>{errorMessage.email}</Text>
-              ) : null}
+              )}
 
               <Text style={styles.label}>Password:</Text>
               <TextInput
@@ -167,9 +200,9 @@ export default function AuthScreen() {
                 value={password}
                 onChangeText={setPassword}
               />
-              {errorMessage.password ? (
+              {errorMessage.password && (
                 <Text style={styles.errorText}>{errorMessage.password}</Text>
-              ) : null}
+              )}
 
               <Text style={styles.label}>Confirm Password:</Text>
               <View style={styles.passwordContainer}>
@@ -181,40 +214,31 @@ export default function AuthScreen() {
                 />
                 <TouchableOpacity
                   style={styles.eyeButton}
-                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onPress={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                 >
                   <Text style={styles.eyeText}>
                     {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
                   </Text>
                 </TouchableOpacity>
               </View>
-              {errorMessage.confirmPassword ? (
-                <Text style={styles.errorText}>{errorMessage.confirmPassword}</Text>
-              ) : null}
+              {errorMessage.confirmPassword && (
+                <Text style={styles.errorText}>
+                  {errorMessage.confirmPassword}
+                </Text>
+              )}
 
-              <TouchableOpacity style={styles.mainButton} onPress={handleSignup}>
+              <TouchableOpacity
+                style={styles.mainButton}
+                onPress={handleSignup}
+              >
                 <Text style={styles.mainButtonText}>SIGN UP</Text>
               </TouchableOpacity>
-
-              <Text style={styles.orText}>OR</Text>
-
-              <TouchableOpacity style={styles.googleBtn}>
-                <Text style={styles.googleBtnText}>Continue with Google</Text>
-              </TouchableOpacity>
-
-              <Text style={styles.bottomText}>
-                Already have an account?{" "}
-                <Text
-                  style={styles.link}
-                  onPress={() => navigation.replace("Auth", { mode: "login" })}
-                >
-                  Sign In
-                </Text>
-              </Text>
             </>
           )}
 
-          {/* ---------- LOGIN ---------- */}
+          {/* LOGIN */}
           {mode === "login" && (
             <>
               <Text style={styles.label}>Username:</Text>
@@ -223,9 +247,9 @@ export default function AuthScreen() {
                 value={username}
                 onChangeText={setUsername}
               />
-              {errorMessage.username ? (
+              {errorMessage.username && (
                 <Text style={styles.errorText}>{errorMessage.username}</Text>
-              ) : null}
+              )}
 
               <View style={styles.passwordRow}>
                 <Text style={styles.label}>Password:</Text>
@@ -238,58 +262,98 @@ export default function AuthScreen() {
                 value={password}
                 onChangeText={setPassword}
               />
-              {errorMessage.password ? (
+              {errorMessage.password && (
                 <Text style={styles.errorText}>{errorMessage.password}</Text>
-              ) : null}
+              )}
 
-              <TouchableOpacity style={styles.mainButton} onPress={handleLogin}>
+              <TouchableOpacity
+                style={styles.mainButton}
+                onPress={handleLogin}
+              >
                 <Text style={styles.mainButtonText}>LOGIN</Text>
               </TouchableOpacity>
-
-              <Text style={styles.orText}>OR</Text>
-
-              <TouchableOpacity style={styles.googleBtn}>
-                <Text style={styles.googleBtnText}>Continue with Google</Text>
-              </TouchableOpacity>
-
-              <Text style={styles.bottomText}>
-                Don’t have an account?{" "}
-                <Text
-                  style={styles.link}
-                  onPress={() => navigation.replace("Auth", { mode: "signup" })}
-                >
-                  Sign Up
-                </Text>
-              </Text>
             </>
           )}
         </View>
       </ScrollView>
+
+      {/* SUCCESS OVERLAY */}
+      <SuccessOverlay
+        visible={overlayVisible}
+        onClose={handleOverlayClose}
+        title={
+          overlayMode === "signup"
+            ? "Registration Successful!"
+            : "Login Successful!"
+        }
+        buttonText={overlayMode === "signup" ? "Login" : "Continue"}
+      />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: { flexGrow: 1, paddingBottom: 40, backgroundColor: "#E9F3FF" },
-  container: { flex: 1, backgroundColor: "#E9F3FF", paddingHorizontal: 25, paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 10 : 30 },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: 40,
+    backgroundColor: "#E9F3FF",
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#E9F3FF",
+    paddingHorizontal: 25,
+    paddingTop:
+      Platform.OS === "android" ? StatusBar.currentHeight + 10 : 30,
+  },
   backBtn: { marginBottom: 10 },
   backText: { fontSize: 24, color: "#0B3C6C" },
-  logo: { width: 115, height: 115, alignSelf: "center", marginTop: 5, marginBottom: 10 },
-  title: { fontSize: 26, fontWeight: "bold", textAlign: "center", marginBottom: 18, color: "#0B3C6C" },
-  label: { fontSize: 14, marginTop: 10, marginBottom: 4, color: "#444" },
-  input: { backgroundColor: "#DFE3EB", borderRadius: 6, paddingVertical: 12, paddingHorizontal: 12, marginBottom: 4 },
-  passwordContainer: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
+  logo: {
+    width: 115,
+    height: 115,
+    alignSelf: "center",
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 18,
+    color: "#0B3C6C",
+  },
+  label: {
+    fontSize: 14,
+    marginTop: 10,
+    marginBottom: 4,
+    color: "#444",
+  },
+  input: {
+    backgroundColor: "#DFE3EB",
+    borderRadius: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    marginBottom: 4,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
   eyeButton: { paddingHorizontal: 10 },
   eyeText: { fontSize: 20 },
-  passwordRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 8 },
+  passwordRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
   forgotText: { color: "red", fontSize: 12, marginTop: 2 },
-  mainButton: { backgroundColor: "#0B3C6C", paddingVertical: 12, borderRadius: 10, marginTop: 18, alignItems: "center" },
+  mainButton: {
+    backgroundColor: "#0B3C6C",
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginTop: 18,
+    alignItems: "center",
+  },
   mainButtonText: { color: "white", fontWeight: "bold", fontSize: 16 },
-  orText: { textAlign: "center", marginVertical: 14, color: "#333" },
-  googleBtn: { backgroundColor: "#0B3C6C", paddingVertical: 12, borderRadius: 10, alignItems: "center" },
-  googleBtnText: { color: "white", fontWeight: "600" },
-  bottomText: { textAlign: "center", marginTop: 16, fontSize: 13, color: "#444", marginBottom: 20 },
-  link: { color: "#0B3C6C", fontWeight: "bold" },
-
   errorText: { color: "red", fontSize: 12, marginTop: 2 },
 });
