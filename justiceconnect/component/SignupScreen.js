@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { createLocalUser } from "../localdb/userDB";
-import SignupScreenUI from "./ui/SignupScreen";
+import SignupScreenUI from "./ui/SignupScreenUI";
 
 export default function SignupScreen() {
   const navigation = useNavigation();

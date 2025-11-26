@@ -20,6 +20,9 @@ export default function HomeScreenUI({
   setMessage,
   handleHamburger,
   navigation,
+  language,
+  isFreeMode,
+  user
 }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F4F8FF" }}>
@@ -33,10 +36,7 @@ export default function HomeScreenUI({
             {/* NAVBAR */}
             <View style={styles.navbar}>
               <View style={styles.navLeft}>
-                <TouchableOpacity
-                  onPress={handleHamburger}
-                  style={styles.menuBtn}
-                >
+                <TouchableOpacity onPress={handleHamburger} style={styles.menuBtn}>
                   <View style={styles.line} />
                   <View style={styles.line} />
                   <View style={styles.line} />
@@ -44,8 +44,11 @@ export default function HomeScreenUI({
 
                 <View>
                   <Text style={styles.navTitle}>JusticeConnect</Text>
+
                   <Text style={styles.navSubtitle}>
-                    Philippine Law AI · English
+                    {isFreeMode
+                      ? "Guest Mode"
+                      : `Philippine Law AI · ${language}`}
                   </Text>
                 </View>
               </View>
@@ -65,33 +68,26 @@ export default function HomeScreenUI({
                 />
 
                 <Text style={styles.welcome}>Welcome to JusticeConnect</Text>
+
                 <Text style={styles.description}>
                   Ask me anything about Philippine law
                 </Text>
 
                 {/* CATEGORY GRID */}
                 <View style={styles.grid}>
-                  <TouchableOpacity
-                    style={[styles.box, { backgroundColor: "#0B3C6C" }]}
-                  >
+                  <TouchableOpacity style={[styles.box, { backgroundColor: "#0B3C6C" }]}>
                     <Text style={styles.boxText}>Labor Rights</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[styles.box, { backgroundColor: "#F5C629" }]}
-                  >
+                  <TouchableOpacity style={[styles.box, { backgroundColor: "#F5C629" }]}>
                     <Text style={styles.boxTextDark}>Property</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[styles.box, { backgroundColor: "#F5C629" }]}
-                  >
+                  <TouchableOpacity style={[styles.box, { backgroundColor: "#F5C629" }]}>
                     <Text style={styles.boxTextDark}>Family Law</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[styles.box, { backgroundColor: "#0B3C6C" }]}
-                  >
+                  <TouchableOpacity style={[styles.box, { backgroundColor: "#0B3C6C" }]}>
                     <Text style={styles.boxText}>Traffic Law</Text>
                   </TouchableOpacity>
                 </View>
@@ -120,11 +116,8 @@ export default function HomeScreenUI({
               </View>
             </KeyboardAvoidingView>
 
-            {/* BACK BUTTON */}
-            <TouchableOpacity
-              style={styles.backBtn}
-              onPress={() => navigation.goBack()}
-            >
+            {/* BACK */}
+            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
               <Text style={styles.backText}>{"<"} Back</Text>
             </TouchableOpacity>
           </View>
@@ -135,17 +128,13 @@ export default function HomeScreenUI({
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: "#F4F8FF",
-  },
+  page: { flex: 1, backgroundColor: "#F4F8FF" },
 
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 18,
   },
 
-  /* NAVBAR */
   navbar: {
     width: "100%",
     height: 70,
@@ -161,9 +150,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 
-  menuBtn: {
-    marginRight: 10,
-  },
+  menuBtn: { marginRight: 10 },
 
   line: {
     width: 26,
@@ -185,12 +172,8 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
 
-  navRight: {
-    width: 30,
-    height: 30,
-  },
+  navRight: { width: 30, height: 30 },
 
-  /* MAIN CONTENT */
   centerContent: {
     alignItems: "center",
     paddingVertical: 25,
@@ -215,7 +198,6 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
 
-  /* GRID */
   grid: {
     width: "100%",
     flexDirection: "row",
@@ -243,7 +225,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  /* CHAT INPUT */
   chatBoxWrapper: {
     paddingHorizontal: 15,
     paddingBottom: 10,
@@ -280,7 +261,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  /* BACK BUTTON */
   backBtn: {
     position: "absolute",
     bottom: 100,
