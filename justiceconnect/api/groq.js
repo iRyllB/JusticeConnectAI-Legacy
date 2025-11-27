@@ -1,3 +1,4 @@
+// api/groq.js
 import fetch from "node-fetch";
 
 export default async function handler(req, res) {
@@ -28,7 +29,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       return res
         .status(response.status)
-        .json({ error: "Groq API returned error", details: data });
+        .json({ error: "Groq API returned an error", details: data });
     }
 
     res.status(200).json({ output_text: data.output_text || "No response", raw: data });
