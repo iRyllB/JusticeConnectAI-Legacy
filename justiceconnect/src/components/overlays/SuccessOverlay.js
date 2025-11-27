@@ -1,5 +1,3 @@
-// components/overlay/SuccessOverlay.js
-
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
@@ -13,7 +11,7 @@ export default function SuccessOverlay({ visible, onClose, title, buttonText }) 
     >
       {/* DIM BACKGROUND */}
       <View style={styles.dimBackground}>
-        
+
         {/* WHITE POPUP BOX */}
         <View style={styles.popupBox}>
 
@@ -24,7 +22,7 @@ export default function SuccessOverlay({ visible, onClose, title, buttonText }) 
 
           {/* Center Icon */}
           <Image
-            source={require("../../assets/mainlogo.png")} // Use your logo here
+            source={require("../../../assets/mainlogo.png")} // Use your logo here
             style={styles.icon}
             resizeMode="contain"
           />

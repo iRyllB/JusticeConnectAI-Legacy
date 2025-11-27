@@ -1,7 +1,7 @@
-// component/GetStarted.js
+// src/screens/GetStarted.js
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import GetStartedUI from './ui/GetStartedUI';
+import GetStartedUI from '../components/ui/GetStartedUI';
 
 export default function HomeAndAuthScreen() {
   const navigation = useNavigation();

@@ -1,24 +1,23 @@
-// components/SignupScreen.js
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { createLocalUser } from "../localdb/userDB";
-import SignupScreenUI from "./ui/SignupScreenUI";
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { createLocalUser } from '../localdb/userDB';
+import SignupScreenUI from '../components/ui/SignupScreenUI';
 
 export default function SignupScreen() {
   const navigation = useNavigation();
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -26,34 +25,34 @@ export default function SignupScreen() {
 
   const handleSignup = async () => {
     let hasError = false;
-    let errors = { username: "", email: "", password: "", confirmPassword: "" };
+    let errors = { username: '', email: '', password: '', confirmPassword: '' };
 
     if (!username) {
-      errors.username = "Username required";
+      errors.username = 'Username required';
       hasError = true;
     }
 
     if (!email) {
-      errors.email = "Email or phone required";
+      errors.email = 'Email or phone required';
       hasError = true;
     } else if (!validateEmail(email) && !validatePhone(email)) {
-      errors.email = "Enter valid email or phone number";
+      errors.email = 'Enter valid email or phone number';
       hasError = true;
     }
 
     if (!password) {
-      errors.password = "Password required";
+      errors.password = 'Password required';
       hasError = true;
     } else if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+      errors.password = 'Password must be at least 6 characters';
       hasError = true;
     }
 
     if (!confirmPassword) {
-      errors.confirmPassword = "Confirm password required";
+      errors.confirmPassword = 'Confirm password required';
       hasError = true;
     } else if (password !== confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
+      errors.confirmPassword = 'Passwords do not match';
       hasError = true;
     }
 
@@ -70,7 +69,7 @@ export default function SignupScreen() {
 
   const closeOverlay = () => {
     setOverlayVisible(false);
-    navigation.replace("Login");
+    navigation.replace('Login');
   };
 
   return (
@@ -87,13 +86,11 @@ export default function SignupScreen() {
       onEmailChange={setEmail}
       onPasswordChange={setPassword}
       onConfirmPasswordChange={setConfirmPassword}
-      onToggleShowConfirmPassword={() =>
-        setShowConfirmPassword((prev) => !prev)
-      }
+      onToggleShowConfirmPassword={() => setShowConfirmPassword((prev) => !prev)}
 
       onSignup={handleSignup}
       onBack={() => navigation.goBack()}
-      onLogin={() => navigation.navigate("Login")}
+      onLogin={() => navigation.navigate('Login')}
       onOverlayClose={closeOverlay}
     />
   );

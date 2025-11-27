@@ -9,7 +9,7 @@ export default function LandingScreenUI({ fadeAnim }) {
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <StatusBar style="dark" />
       <Image
-        source={require('../../assets/mainlogo.png')}
+        source={require('../../../assets/mainlogo.png')}
         style={styles.logo}
         resizeMode="contain"
       />

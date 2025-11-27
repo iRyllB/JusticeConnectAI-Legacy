@@ -1,30 +1,29 @@
-// components/LoginScreen.js
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { loginLocalUser } from "../localdb/userDB";
-import LoginScreenUI from "./ui/LoginScreenUI";
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { loginLocalUser } from '../localdb/userDB';
+import LoginScreenUI from '../components/ui/LoginScreenUI';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const [errorMessage, setErrorMessage] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   const handleLogin = async () => {
-    let errors = { username: "", password: "" };
+    let errors = { username: '', password: '' };
     let hasError = false;
 
     if (!username) {
-      errors.username = "Username required";
+      errors.username = 'Username required';
       hasError = true;
     }
     if (!password) {
-      errors.password = "Password required";
+      errors.password = 'Password required';
       hasError = true;
     }
 
@@ -34,11 +33,11 @@ export default function LoginScreen() {
     try {
       await loginLocalUser({ username, password });
 
-      navigation.replace("Homepage");
+      navigation.replace('Homepage');
     } catch (err) {
       setErrorMessage({
         ...errors,
-        password: "Invalid username or password",
+        password: 'Invalid username or password',
       });
     }
   };
@@ -52,7 +51,7 @@ export default function LoginScreen() {
       onPasswordChange={setPassword}
       onLoginPress={handleLogin}
       onBack={() => navigation.goBack()}
-      onSignup={() => navigation.navigate("Signup")}
+      onSignup={() => navigation.navigate('Signup')}
     />
   );
 }

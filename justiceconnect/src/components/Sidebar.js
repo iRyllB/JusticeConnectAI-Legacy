@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Animated, Dimensions } from "react-native";
-import SidebarUI from "./ui/SidebarUI";
+import React, { useState } from 'react';
+import { Animated, Dimensions } from 'react-native';
+import SidebarUI from './ui/SidebarUI';
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function SidebarLogic({
   isOpen,
@@ -18,13 +18,13 @@ export default function SidebarLogic({
   currentChatId,
   user,
 }) {
-  const [activeTab, setActiveTab] = useState("language");
+  const [activeTab, setActiveTab] = useState('language');
   const slideAnim = useState(new Animated.Value(-SCREEN_WIDTH))[0];
 
   const languages = [
-    { code: "english", label: "English", flag: "🇬🇧" },
-    { code: "tagalog", label: "Tagalog", flag: "🇵🇭" },
-    { code: "bisaya", label: "Bisaya", flag: "🇵🇭" },
+    { code: 'english', label: 'English', flag: '🇬🇧' },
+    { code: 'tagalog', label: 'Tagalog', flag: '🇵🇭' },
+    { code: 'bisaya', label: 'Bisaya', flag: '🇵🇭' },
   ];
 
   // Animate sidebar open/close
@@ -37,9 +37,9 @@ export default function SidebarLogic({
   }, [isOpen]);
 
   const getPreviewText = (messages) => {
-    if (!messages || messages.length === 0) return "New conversation";
-    const firstUserMessage = messages.find((m) => m.role === "user");
-    return firstUserMessage?.content.substring(0, 50) + "..." || "New conversation";
+    if (!messages || messages.length === 0) return 'New conversation';
+    const firstUserMessage = messages.find((m) => m.role === 'user');
+    return firstUserMessage?.content.substring(0, 50) + '...' || 'New conversation';
   };
 
   const formatDate = (dateString) => {

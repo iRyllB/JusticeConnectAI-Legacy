@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated } from 'react-native';
 import HomeScreen from './GetStarted';
-import LandingScreenUI from './ui/LandingScreenUI';
+import LandingScreenUI from '../components/ui/LandingScreenUI';
 
 export default function LandingScreen() {
   const [showHome, setShowHome] = useState(false);

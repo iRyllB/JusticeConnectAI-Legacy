@@ -1,4 +1,3 @@
-// components/ui/SignupScreenUI.js
 import React from "react";
 import {
   View,
@@ -41,7 +40,7 @@ export default function SignupScreenUI({
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          
+
           {/* Back */}
           <TouchableOpacity style={styles.backBtn} onPress={onBack}>
             <Text style={styles.backText}>{"<"}</Text>
@@ -49,7 +48,7 @@ export default function SignupScreenUI({
 
           {/* Logo */}
           <Image
-            source={require("../../assets/mainlogo.png")}
+            source={require("../../../assets/mainlogo.png")}
             style={styles.logo}
           />
 

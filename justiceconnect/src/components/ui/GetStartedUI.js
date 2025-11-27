@@ -1,4 +1,3 @@
-// component/ui/GetStartedUI.js
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
@@ -8,7 +7,7 @@ export default function GetStartedUI({ showAuth, setShowAuth, navigation }) {
       {!showAuth ? (
         <View style={styles.centered}>
           <Image
-            source={require('../../assets/mainlogo.png')}
+            source={require('../../../assets/mainlogo.png')}
             style={styles.logo}
             resizeMode="contain"
           />
@@ -30,7 +29,7 @@ export default function GetStartedUI({ showAuth, setShowAuth, navigation }) {
       ) : (
         <View style={styles.centered}>
           <Image
-            source={require('../../assets/mainlogo.png')}
+            source={require('../../../assets/mainlogo.png')}
             style={styles.logo}
             resizeMode="contain"
           />

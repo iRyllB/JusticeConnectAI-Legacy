@@ -194,6 +194,7 @@ export default function SidebarUI({
   );
 }
 
+
 //
 // ----- THEME ----
 //
@@ -224,7 +225,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 10,
   },
-
   header: {
     backgroundColor: theme.main,
     flexDirection: "row",
@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
   headerText: { color: "#FFFFFF", fontSize: 18, fontWeight: "bold" },
   closeButton: { padding: 4 },
   closeText: { color: "#FFFFFF", fontWeight: "bold", fontSize: 18 },
-
   userSection: {
     flexDirection: "row",
     alignItems: "center",
@@ -256,7 +255,6 @@ const styles = StyleSheet.create({
   avatarText: { color: "#FFFFFF", fontWeight: "bold" },
   username: { fontSize: 16, color: theme.main, fontWeight: "bold" },
   userEmail: { fontSize: 12, color: theme.subtext },
-
   tabs: {
     flexDirection: "row",
     borderBottomWidth: 1,
@@ -279,12 +277,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   activeTabText: { color: theme.main, fontWeight: "bold" },
-
   freeMode: { padding: 16, alignItems: "center" },
   freeTitle: { color: theme.main, fontSize: 16, fontWeight: "bold" },
   freeText: { color: theme.subtext, textAlign: "center", marginTop: 8 },
   freeWarning: { color: theme.subtext, marginTop: 6, fontSize: 12 },
-
   languageTab: { padding: 16 },
   languageButton: {
     flexDirection: "row",
@@ -300,7 +296,6 @@ const styles = StyleSheet.create({
   flag: { fontSize: 18, marginRight: 8 },
   languageLabel: { flex: 1, color: theme.main, fontWeight: "600" },
   check: { color: theme.main, fontWeight: "bold" },
-
   historyTab: { padding: 16 },
   newChatButton: {
     flexDirection: "row",
@@ -311,10 +306,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   newChatText: { color: "#FFFFFF", marginLeft: 8, fontWeight: "bold" },
-
   emptyHistory: { alignItems: "center", padding: 32 },
   emptyText: { color: theme.subtext, marginTop: 8 },
-
   chatItem: {
     padding: 12,
     backgroundColor: theme.card,
@@ -332,7 +325,6 @@ const styles = StyleSheet.create({
   },
   chatDate: { color: theme.subtext, fontSize: 10 },
   chatLang: { color: theme.subtext, fontSize: 10 },
-
   deleteButton: {
     position: "absolute",
     top: 8,
@@ -340,7 +332,6 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   deleteText: { color: theme.main, fontWeight: "bold" },
-
   footer: {
     padding: 16,
     borderTopWidth: 1,

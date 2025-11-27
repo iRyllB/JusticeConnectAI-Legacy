@@ -1,4 +1,3 @@
-// components/ui/LoginScreenUI.js
 import React from "react";
 import {
   View,
@@ -37,7 +36,7 @@ export default function LoginScreenUI({
           </TouchableOpacity>
 
           {/* Logo */}
-          <Image source={require("../../assets/mainlogo.png")} style={styles.logo} />
+          <Image source={require("../../../assets/mainlogo.png")} style={styles.logo} />
 
           <Text style={styles.title}>Welcome</Text>
 
