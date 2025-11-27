@@ -1,8 +1,10 @@
 {
-  "hostType": "lan",
-  "lanType": "ip",
+  "urlRandomness": "edSzw_I",
   "dev": true,
   "minify": false,
-  "urlRandomness": null,
-  "https": false
+  "https": false,
+  "hostType": "lan",
+  "lanType": "ip",
+  "scheme": null,
+  "devClient": false
 }
