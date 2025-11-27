@@ -10,7 +10,7 @@ const BASE_URL = PROXY_URL
 
 export async function generateGroqResponse({ prompt, model = 'gemma2-9b-it', max_output_tokens = 200 }) {
   // Append /groq only for local proxy
-  const target = PROXY_URL ? BASE_URL : `${BASE_URL}/groq`;
+  const target = PROXY_URL;  // no extra /groq appended
 
   try {
     console.debug('[groqClient] calling target:', target);
