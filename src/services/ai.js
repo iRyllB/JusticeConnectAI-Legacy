@@ -1,16 +1,17 @@
-import OpenAI from 'openai';
 import { EXPO_PUBLIC_OPENAI_API_KEY, PROXY_URL } from '@env';
 import { Platform } from 'react-native';
 
-let client = null;
-if (EXPO_PUBLIC_OPENAI_API_KEY) {
-  // Server-side or native usage is fine
-  client = new OpenAI({ apiKey: EXPO_PUBLIC_OPENAI_API_KEY });
-}
+let client = null; // Will be created dynamically on non-web platforms only
 
 export async function askAI(message) {
   // If we have a client (native/dev server-side), use SDK
-  if (client && Platform.OS !== 'web') {
+  if (Platform.OS !== 'web' && EXPO_PUBLIC_OPENAI_API_KEY) {
+    // Create client dynamically to avoid bundling 'openai' in web bundles
+    if (!client) {
+      const OpenAIModule = await import('openai');
+      const OpenAI = OpenAIModule?.default || OpenAIModule;
+      client = new OpenAI({ apiKey: EXPO_PUBLIC_OPENAI_API_KEY });
+    }
     const response = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: message }]
