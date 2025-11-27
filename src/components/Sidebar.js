@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Animated, Dimensions } from 'react-native';
+import { Animated, Dimensions, Platform } from 'react-native';
 import SidebarUI from './ui/SidebarUI';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -32,7 +32,7 @@ export default function SidebarLogic({
     Animated.timing(slideAnim, {
       toValue: isOpen ? 0 : -SCREEN_WIDTH,
       duration: 300,
-      useNativeDriver: true,
+      useNativeDriver: Platform.OS !== 'web',
     }).start();
   }, [isOpen]);
 

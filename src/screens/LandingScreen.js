@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import { Animated, Platform } from 'react-native';
 import HomeScreen from './GetStarted';
 import LandingScreenUI from '../components/ui/LandingScreenUI';
 
@@ -12,7 +12,7 @@ export default function LandingScreen() {
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 500,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== 'web',
       }).start(() => setShowHome(true));
     }, 2002);
 

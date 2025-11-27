@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Platform } from 'react-native';
 import { PROXY_URL as ENV_PROXY_URL, GROQ_API_KEY as ENV_GROQ_KEY } from '@env';
 import { NavigationContainer } from '@react-navigation/native';
+import ErrorBoundary from './src/components/ErrorBoundary';
+import GlobalErrorOverlay from './src/components/GlobalErrorOverlay';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // SCREENS
@@ -22,7 +24,9 @@ export default function App() {
     console.info('[App] GROQ_API_KEY present:', !!ENV_GROQ_KEY);
   }, []);
   return (
-    <NavigationContainer>
+    <ErrorBoundary>
+      <NavigationContainer>
+        <GlobalErrorOverlay />
       <Stack.Navigator initialRouteName="Landing">
 
         <Stack.Screen
@@ -66,6 +70,7 @@ export default function App() {
         />
 
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </ErrorBoundary>
   );
 }
