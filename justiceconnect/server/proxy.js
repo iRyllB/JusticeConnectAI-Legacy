@@ -1,6 +1,5 @@
-// server/proxy.js
 import express from "express";
-import fetch from "node-fetch"; // keep node-fetch v3 (ESM)
+import fetch from "node-fetch"; // node-fetch v3 (ESM)
 import cors from "cors";
 import 'dotenv/config';
 
@@ -15,8 +14,9 @@ app.use(express.json());
 app.post("/groq", async (req, res) => {
   try {
     const { model, prompt, max_output_tokens } = req.body;
+
     if (!GROQ_API_KEY) {
-      console.error('Missing GROQ_API_KEY. Set it in .env or as an environment variable.');
+      console.error('[proxy] Missing GROQ_API_KEY');
       return res.status(500).json({ error: 'Missing GROQ_API_KEY' });
     }
 
@@ -35,17 +35,31 @@ app.post("/groq", async (req, res) => {
 
     const data = await response.json();
 
-    // Make sure to return text to the mobile app
+    if (!response.ok) {
+      console.error('[proxy] Groq API error:', data);
+      return res.status(response.status).json({
+        error: "Groq API returned an error",
+        details: data,
+      });
+    }
+
+    console.log('[proxy] Groq API response:', data);
     res.json({
       output_text: data.output_text || "No response from Groq AI.",
       raw: data,
     });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error calling Groq AI." });
+    console.error('[proxy] Network or other error:', err);
+    res.status(500).json({
+      error: "Error calling Groq AI",
+      details: err.message || err.toString(),
+    });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running at http://localhost:${PORT}`);
+// Listen on all network interfaces, not just localhost
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[proxy] Server running and listening on all network interfaces`);
+  console.log(`[proxy] Access via PC IP: http://192.168.1.6:${PORT}/groq`);
 });

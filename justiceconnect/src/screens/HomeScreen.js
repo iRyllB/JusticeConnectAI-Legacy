@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import HomeScreenUI from '../components/ui/HomeScreenUI.js';
-import { generateGroqResponse } from '../services/groqClient';
+import { generateGroqResponse } from '../services/groqClient.js';
 import SidebarLogic from '../components/Sidebar.js';
 
 // Use PROXY_URL from environment (fallback to dev host)
